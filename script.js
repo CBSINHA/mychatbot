@@ -1,4 +1,4 @@
-const API_URL = "https://pribate.onrender.com/chat"; // Your backend URL
+const API_URL = "https://pribate.onrender.com/chat"; 
 
 async function sendMessage() {
     const userInput = document.getElementById("user-input").value;
@@ -12,7 +12,7 @@ async function sendMessage() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "message": userInput }) // Fixed JSON format issue
+            body: JSON.stringify({ "message": userInput }) 
         });
 
         if (!response.ok) {
@@ -25,5 +25,5 @@ async function sendMessage() {
         document.getElementById("chat-box").innerHTML += `<p><strong>Bot:</strong> Error: ${error.message}</p>`;
     }
 
-    document.getElementById("user-input").value = ""; // Clear input field
+    document.getElementById("user-input").value = ""; 
 }
