@@ -1,34 +1,29 @@
-const API_URL = "https://pribate.onrender.com";  // Replace with your actual Render URL
+const API_URL = "https://pribate.onrender.com/chat"; // Your backend URL
 
 async function sendMessage() {
     const userInput = document.getElementById("user-input").value;
-    if (!userInput) return;
+    if (!userInput.trim()) return;
 
-    const chatBox = document.getElementById("chat-box");
-
-    // Show user message
-    chatBox.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
-
-    // Clear input
-    document.getElementById("user-input").value = "";
+    document.getElementById("chat-box").innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
 
     try {
         const response = await fetch(API_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: userInput })
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "message": userInput }) // Fixed JSON format issue
         });
 
-        const data = await response.json();
-        if (data.bot_response) {
-            chatBox.innerHTML += `<p><strong>Bot:</strong> ${data.bot_response}</p>`;
-        } else {
-            chatBox.innerHTML += `<p><strong>Bot:</strong> Error: ${data.error}</p>`;
+        if (!response.ok) {
+            throw new Error(`Server Error: ${response.statusText}`);
         }
+
+        const data = await response.json();
+        document.getElementById("chat-box").innerHTML += `<p><strong>Bot:</strong> ${data.response}</p>`;
     } catch (error) {
-        chatBox.innerHTML += `<p><strong>Bot:</strong> Server error</p>`;
+        document.getElementById("chat-box").innerHTML += `<p><strong>Bot:</strong> Error: ${error.message}</p>`;
     }
 
-    // Auto-scroll to the bottom
-    chatBox.scrollTop = chatBox.scrollHeight;
+    document.getElementById("user-input").value = ""; // Clear input field
 }
